@@ -49,16 +49,22 @@
     <div id="result"></div>
 
     <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark task-bar">
-
-        <div class="input-group input-group-navbar">
-            <select class="custom-select" id="inputGroupSelect02">
-                <option selected>C++</option>
-                <option value="1">Go</option>
-            </select>
-            <div class="input-group-append">
-                <button class="btn btn-success" type="button" id="run">Run <i class="fas fa-play-circle"></i></button>
-            </div>
-        </div>
+        <ul class="nav my-2">
+            <li class="nav-item pr-3">
+                <div class="input-group input-group-navbar">
+                    <select class="custom-select" id="inputGroupSelect02">
+                        <option selected>C++</option>
+                        <option value="1">Go</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-info" type="button" id="run">Run <i class="fas fa-play-circle"></i></button>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item pr-3">
+                <button class="btn btn-success" type="button" id="run">Link <i class="fas fa-link"></i></button>
+            </li>
+        </ul>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -66,10 +72,6 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#"><i class="fas fa-share fa-fw" aria-hidden="true"></i>&nbsp;
-                        Share</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://github.com/compute-info/compute-info.github.io"><i class="fab fa-github fa-fw"
                             aria-hidden="true"></i>&nbsp; About</a>
@@ -133,8 +135,8 @@
     <!-- Google Analytics -->
     <script>
         (function (b, o, i, l, e, r) {
-        b.GoogleAnalyticsObject = l; b[l] || (b[l] =
-            function () { (b[l].q = b[l].q || []).push(arguments) }); b[l].l = +new Date;
+            b.GoogleAnalyticsObject = l; b[l] || (b[l] =
+                function () { (b[l].q = b[l].q || []).push(arguments) }); b[l].l = +new Date;
             e = o.createElement(i); r = o.getElementsByTagName(i)[0];
             e.src = 'https://www.google-analytics.com/analytics.js';
             r.parentNode.insertBefore(e, r)
