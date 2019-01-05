@@ -5,8 +5,7 @@ compute-info.github.io
 ## Technology
 * BootStrap
 * jQuery
-* Go
-* Docker
+* [CodeMirror](https://codemirror.net/)
 * [GitHub Pages](http://pages.github.com/)
 * [Google Analytics](https://analytics.google.com)
 
