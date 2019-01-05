@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+    
+        #editor {
+            height: calc(100% - 56px);
+        }
+    
+        #result {
+            background-color: #012456;
+            color: #eaeaea;
+            padding: 10px;
+            display: none;
+            padding-bottom: 66px;
+        }
+
+        .input-group-navbar {
+            width: initial;
+        }
+    </style>
+
+
+    <title>compute.info | A casual coding playground.</title>
+</head>
+
+<body>
+    <div id="editor"></div>
+    <div id="result"></div>
+
+    <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
+
+        <div class="input-group input-group-navbar">
+            <select class="custom-select" id="inputGroupSelect02">
+                <option selected>C++</option>
+                <option value="1">Go</option>
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-success" type="button" id="run">Run <i class="fas fa-play-circle"></i></button>
+            </div>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#"><i class="fas fa-share fa-fw" aria-hidden="true"></i>&nbsp;
+                        Share</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/compute-info"><i class="fab fa-github fa-fw"
+                            aria-hidden="true"></i>&nbsp; About</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+        crossorigin="anonymous">
+
+    <!-- CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/codemirror.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/codemirror.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/theme/base16-dark.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/clike/clike.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/go/go.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/javascript/javascript.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        var codeMirror;
+        var playGround = {
+            init: function () {
+                codeMirror = CodeMirror($("#editor").get(0), {
+                    value: "func myFunction() {\n  fmt.Println(\"Hello World!\")\n}",
+                    mode: "go",
+                    theme: "base16-dark",
+                    lineNumbers: true
+                });
+                codeMirror.setSize("100%", "100%");
+            },
+
+            run: function () {
+                var code = codeMirror.getValue();
+                var req = $.post("https://httpbin.org/post", code);
+                req.done(function (resp) {
+                    $("#result").text(resp.origin);
+                    $("#result").show();
+                    $("#result")[0].scrollIntoView({
+                        behavior: "smooth"
+                    });
+                });
+            }
+        }
+
+        $(document).ready(playGround.init);
+        $("#run").click(playGround.run);
+    </script>
+
+</body>
+
+</html>
