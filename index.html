@@ -116,8 +116,10 @@
             },
 
             run: function () {
-                var code = codeMirror.getValue();
-                var req = $.post("https://httpbin.org/post", code);
+                var data = new Object();
+                data.code = JSON.stringify(codeMirror.getValue());
+
+                var req = $.post("http://worker.compute.info/run", data);
                 req.done(function (resp) {
                     $("#result").text(resp.origin);
                     $("#result").show();
