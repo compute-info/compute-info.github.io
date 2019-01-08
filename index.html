@@ -46,7 +46,7 @@
 
 <body>
     <div id="editor"></div>
-    <div id="result"></div>
+    <pre><code><div id="result"></div></code></pre>
 
     <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark task-bar">
         <ul class="nav my-2">
@@ -117,11 +117,11 @@
 
             run: function () {
                 var data = new Object();
-                data.code = JSON.stringify(codeMirror.getValue());
+                data.code = codeMirror.getValue();
 
-                var req = $.post("https://worker01.compute.info/run", data);
+                var req = $.post("https://worker01.compute.info/run", JSON.stringify(data));
                 req.done(function (resp) {
-                    $("#result").text(resp.origin);
+                    $("#result").text(resp);
                     $("#result").show();
                     $("#result")[0].scrollIntoView({
                         behavior: "smooth"
