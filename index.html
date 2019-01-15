@@ -134,6 +134,9 @@
             },
 
             run: function () {
+                $("#run").html('Run <div class="fas fa-spinner fa-spin"></div>');
+                $("#run").prop('disabled', true);
+
                 var data = new Object();
                 data.code = codeMirror.getValue();
 
@@ -159,6 +162,10 @@
                             default:
                                 playGround.alert(text);
                         }
+                    }).
+                    always(function() {
+                        $("#run").html('Run <i class="fas fa-play-circle"></i>');
+                        $("#run").prop('disabled', false);
                     });
             },
 
