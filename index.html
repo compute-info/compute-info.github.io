@@ -146,13 +146,18 @@
                         });
                     }).
                     fail(function(xhr, status, error) {
+                        var text = xhr.responseText;
+                        if (typeof text == "undefined") {
+                            text = "backend problem - please refresh and try again"
+                        }
+
                         switch(xhr.status) {
                             case 429:
-                                playGround.alert(xhr.responseText, "warning");
+                                playGround.alert(text, "warning");
                                 break;
 
                             default:
-                                playGround.alert(xhr.responseText);
+                                playGround.alert(text);
                         }
                     });
             },
