@@ -3,11 +3,10 @@ compute-info.github.io
 **compute-info.github.io** is a casual coding playground, reachable at [compute.info](https://compute.info).
 
 ## Technology
-* BootStrap
-* jQuery
 * [CodeMirror](https://codemirror.net/)
 * [GitHub Pages](http://pages.github.com/)
-* [Google Analytics](https://analytics.google.com)
+* BootStrap
+* jQuery
 
 ## Contact
 * e-mail: root@compute.info

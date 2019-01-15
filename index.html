@@ -26,7 +26,7 @@
             background-color: #012456;
             padding: 20px;
             display: none;
-            margin-bottom: 70px
+            margin-bottom: 70px;
         }
 
         #result pre {
@@ -44,6 +44,11 @@
         .task-bar {
             background-color: #262626
         }
+
+        .alert {
+            display: none;
+            margin-bottom: 0;
+        }
     </style>
 
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
@@ -52,6 +57,12 @@
 </head>
 
 <body>
+    <div id="alert" class="alert" role="alert">
+        <button type="button" class="close" onclick="$('#alert').removeClass(); $('#alert').hide();" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div id="alert-text"></div>
+    </div>
     <div id="editor"></div>
     <div id="result"><pre><code id="output"></code></pre></div>
 
@@ -126,14 +137,45 @@
                 var data = new Object();
                 data.code = codeMirror.getValue();
 
-                var req = $.post("https://worker01.compute.info/run", JSON.stringify(data));
-                req.done(function (resp) {
-                    $("#output").text(resp);
-                    $("#result").show();
-                    $("#result")[0].scrollIntoView({
-                        behavior: "smooth"
+                $.post("https://worker01.compute.info/run", JSON.stringify(data)).
+                    done(function (resp) {
+                        $("#output").text(resp);
+                        $("#result").show();
+                        $("#result")[0].scrollIntoView({
+                            behavior: "smooth"
+                        });
+                    }).
+                    fail(function(xhr, status, error) {
+                        switch(xhr.status) {
+                            case 429:
+                                playGround.alert(xhr.responseText, "warning");
+                                break;
+
+                            default:
+                                playGround.alert(xhr.responseText);
+                        }
                     });
-                });
+            },
+
+            alert: function (text, type) {
+                var alertClasses;
+                var msg;
+
+                switch (type) {
+                    case "warning":
+                        alertClasses = "alert alert-warning alert-dismissible fade show";
+                        msg = "<strong>WARNING:</strong> " + text;
+                        break;
+
+                    default:
+                        alertClasses = "alert alert-danger alert-dismissible fade show";
+                        msg = "<strong>ERROR:</strong> " + text;
+                }
+
+                $("#alert").addClass(alertClasses);
+                $("#alert-text").html(msg);
+                $("#alert").show();
+                $(window).scrollTop(0);
             }
         }
 
