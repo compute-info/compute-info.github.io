@@ -133,12 +133,16 @@
 
                 var dataObj;
                 var dataStr = localStorage.getItem("data");
-                console.log(dataStr);
+                var cHelloWorld = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}"; 
+
                 if (dataStr === null) {
                     dataObj = new Object();
-                    dataObj.code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}"; 
+                    dataObj.code = cHelloWorld;
                 } else {
                     dataObj = JSON.parse(dataStr);
+                    if (dataObj.code === "") {
+                        dataObj.code = cHelloWorld;
+                    }
                 }
 
                 codeMirror.setValue(dataObj.code);
