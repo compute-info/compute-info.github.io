@@ -125,22 +125,36 @@
         var playGround = {
             init: function () {
                 codeMirror = CodeMirror($("#editor").get(0), {
-                    value: "#include<stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n} ",
                     mode: "clike",
                     theme: "base16-dark",
                     lineNumbers: true
                 });
                 codeMirror.setSize("100%", "100%");
+
+                var dataObj;
+                var dataStr = localStorage.getItem("data");
+                console.log(dataStr);
+                if (dataStr === null) {
+                    dataObj = new Object();
+                    dataObj.code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}"; 
+                } else {
+                    dataObj = JSON.parse(dataStr);
+                }
+
+                codeMirror.setValue(dataObj.code);
             },
 
             run: function () {
                 $("#run").html('Run <div class="fas fa-spinner fa-spin"></div>');
                 $("#run").prop('disabled', true);
 
-                var data = new Object();
-                data.code = codeMirror.getValue();
+                var dataObj = new Object();
+                dataObj.code = codeMirror.getValue();
+                var dataStr = JSON.stringify(dataObj)
 
-                $.post("https://worker01.compute.info/run", JSON.stringify(data)).
+                localStorage['data'] = dataStr;
+
+                $.post("https://worker01.compute.info/run", dataStr).
                     done(function (resp) {
                         $("#output").text(resp);
                         $("#result").show();
