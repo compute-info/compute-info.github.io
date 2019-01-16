@@ -70,8 +70,9 @@
         <ul class="nav my-2">
             <li class="nav-item pr-3">
                 <div class="input-group input-group-navbar">
-                    <select class="custom-select" id="inputGroupSelect02">
-                        <option selected>C</option>
+                    <select class="custom-select" id="lang">
+                        <option selected value="c" selected="selected">C</option>
+                        <option selected value="cpp">C++</option>
                         <!-- <option value="1">Go</option> -->
                     </select>
                     <div class="input-group-append">
@@ -153,6 +154,7 @@
                 $("#run").prop('disabled', true);
 
                 var dataObj = new Object();
+                dataObj.lang = $("#lang").val();
                 dataObj.code = codeMirror.getValue();
                 var dataStr = JSON.stringify(dataObj)
 
