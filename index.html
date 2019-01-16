@@ -124,7 +124,7 @@
     <script>
         var codeMirror;
         var playGround = {
-            init: function () {
+            init: function() {
                 codeMirror = CodeMirror($("#editor").get(0), {
                     mode: "clike",
                     theme: "base16-dark",
@@ -132,24 +132,17 @@
                 });
                 codeMirror.setSize("100%", "100%");
 
-                var dataObj;
                 var dataStr = localStorage.getItem("data");
-                var cHelloWorld = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}"; 
+                var dataObj = JSON.parse(dataStr);
 
-                if (dataStr === null) {
-                    dataObj = new Object();
-                    dataObj.code = cHelloWorld;
+                if (dataStr !== null && dataObj.code !== "") {
+                    codeMirror.setValue(dataObj.code);
                 } else {
-                    dataObj = JSON.parse(dataStr);
-                    if (dataObj.code === "") {
-                        dataObj.code = cHelloWorld;
-                    }
+                    playGround.helloWorld();
                 }
-
-                codeMirror.setValue(dataObj.code);
             },
 
-            run: function () {
+            run: function() {
                 $("#run").html('Run <div class="fas fa-spinner fa-spin"></div>');
                 $("#run").prop('disabled', true);
 
@@ -189,7 +182,7 @@
                     });
             },
 
-            alert: function (text, type) {
+            alert: function(text, type) {
                 var alertClasses;
                 var msg;
 
@@ -208,11 +201,27 @@
                 $("#alert-text").html(msg);
                 $("#alert").show();
                 $(window).scrollTop(0);
+            },
+
+            helloWorld: function() {
+                var cHelloWorld = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}"; 
+                var cppHelloWorld = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}"; 
+
+                switch($("#lang").val())
+                {
+                    case "c":
+                        codeMirror.setValue(cHelloWorld);
+                        break;
+                    
+                    default:
+                        codeMirror.setValue(cppHelloWorld);
+                }
             }
         }
 
         $(document).ready(playGround.init);
         $("#run").click(playGround.run);
+        $("#lang").change(playGround.helloWorld);
     </script>
 
     <!-- Google Analytics -->
