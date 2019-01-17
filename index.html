@@ -126,7 +126,6 @@
         var playGround = {
             init: function() {
                 codeMirror = CodeMirror($("#editor").get(0), {
-                    mode: "clike",
                     theme: "base16-dark",
                     lineNumbers: true
                 });
@@ -135,11 +134,7 @@
                 var dataStr = localStorage.getItem("data");
                 var dataObj = JSON.parse(dataStr);
 
-                if (dataStr !== null && dataObj.code !== "") {
-                    codeMirror.setValue(dataObj.code);
-                } else {
-                    playGround.helloWorld();
-                }
+                playGround.codeSetup(dataObj);
             },
 
             run: function() {
@@ -203,25 +198,35 @@
                 $(window).scrollTop(0);
             },
 
-            helloWorld: function() {
+            codeSetup: function(dataObj) {
                 var cHelloWorld = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}"; 
-                var cppHelloWorld = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}"; 
+                var cppHelloWorld = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
+                var code, lang;
 
-                switch($("#lang").val())
+                if (dataObj !== null && Object.keys(dataObj).length !== 0) {
+                    code = dataObj.code;
+                    lang = dataObj.lang;
+                } else {
+                    lang = $("#lang").val();
+                }
+
+                switch(lang)
                 {
                     case "c":
-                        codeMirror.setValue(cHelloWorld);
+                        codeMirror.setValue(typeof code !== "undefined" ? code : cHelloWorld);
+                        codeMirror.setOption("mode", "clike");
                         break;
                     
                     default:
-                        codeMirror.setValue(cppHelloWorld);
+                        codeMirror.setValue(typeof code !== "undefined" ? code : cppHelloWorld);
+                        codeMirror.setOption("mode", "clike");
                 }
             }
         }
 
         $(document).ready(playGround.init);
         $("#run").click(playGround.run);
-        $("#lang").change(playGround.helloWorld);
+        $("#lang").change(function(){playGround.codeSetup(null);});
     </script>
 
     <!-- Google Analytics -->
