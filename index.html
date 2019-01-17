@@ -147,6 +147,7 @@
                 var dataStr = JSON.stringify(dataObj)
 
                 localStorage['data'] = dataStr;
+                codeMirror.markClean();
 
                 $.post("https://worker01.compute.info/run", dataStr).
                     done(function (resp) {
@@ -199,8 +200,6 @@
             },
 
             codeSetup: function(dataObj) {
-                var cHelloWorld = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}"; 
-                var cppHelloWorld = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
                 var code, lang;
 
                 if (dataObj !== null && Object.keys(dataObj).length !== 0) {
@@ -210,15 +209,26 @@
                     lang = $("#lang").val();
                 }
 
-                switch(lang)
-                {
+                if (codeMirror.isClean()) {
+                    var cHelloWorld = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}";
+                    var cppHelloWorld = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
+
+                    switch (lang) {
+                        case "c":
+                            codeMirror.setValue(typeof code !== "undefined" ? code : cHelloWorld);
+                            break;
+                        default:
+                            codeMirror.setValue(typeof code !== "undefined" ? code : cppHelloWorld);
+                    }
+                    codeMirror.markClean();
+                }
+
+                switch (lang) {
                     case "c":
-                        codeMirror.setValue(typeof code !== "undefined" ? code : cHelloWorld);
+                    case "cpp":
                         codeMirror.setOption("mode", "clike");
                         break;
-                    
                     default:
-                        codeMirror.setValue(typeof code !== "undefined" ? code : cppHelloWorld);
                         codeMirror.setOption("mode", "clike");
                 }
             }
