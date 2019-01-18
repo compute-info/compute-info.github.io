@@ -148,10 +148,11 @@
 
                 localStorage['data'] = dataStr;
                 codeMirror.markClean();
-
+                
+                // $.post("http://localhost:8080/run", dataStr).
                 $.post("https://worker01.compute.info/run", dataStr).
                     done(function (resp) {
-                        $("#output").text(resp);
+                        $("#output").text(resp.output);
                         $("#result").show();
                         $("#result")[0].scrollIntoView({
                             behavior: "smooth"
