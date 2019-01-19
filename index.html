@@ -77,11 +77,9 @@
                     </select>
                     <div class="input-group-append">
                         <button class="btn btn-dark" type="button" id="run">Run <i class="fas fa-play-circle"></i></button>
+                        <button class="btn btn-info" type="button" id="link">Link <i class="fas fa-link"></i></button>
                     </div>
                 </div>
-            </li>
-            <li class="nav-item pr-3">
-                <button class="btn btn-info" type="button" id="link">Link <i class="fas fa-link"></i></button>
             </li>
         </ul>
 
@@ -122,8 +120,8 @@
 
     <!-- Custom JS -->
     <script>
-        // var worker = "http://localhost:8080";
-        var worker = "https://worker01.compute.info";
+        // var worker = "http://localhost:8080/";
+        var worker = "https://worker01.compute.info/";
         var codeMirror;
         var playGround = {
             init: function() {
@@ -146,12 +144,13 @@
                 var dataObj = new Object();
                 dataObj.lang = $("#lang").val();
                 dataObj.code = codeMirror.getValue();
+                dataObj.run = true;
                 var dataStr = JSON.stringify(dataObj);
 
                 localStorage['data'] = dataStr;
                 codeMirror.markClean();
                 
-                $.post(worker + "/run", dataStr).
+                $.post(worker, dataStr).
                     done(function (resp) {
                         $("#output").text(resp.output);
                         $("#result").show();
@@ -189,7 +188,7 @@
                 dataObj.code = codeMirror.getValue();
                 var dataStr = JSON.stringify(dataObj);
 
-                $.post(worker + "/link", dataStr).
+                $.post(worker, dataStr).
                     done(function (resp) {
                         $("#output").text(resp.id);
                         $("#result").show();
