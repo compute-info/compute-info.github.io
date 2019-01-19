@@ -134,11 +134,23 @@
                 codeMirror.setSize("100%", "100%");
 
                 var dataStr, dataObj;
-                if (window.location.hash == "" || window.location.hash == "#") {
+                var hashVal = window.location.hash;
+                if (hashVal === "" || hashVal === "#") {
                     dataStr = localStorage.getItem("data");
                     dataObj = JSON.parse(dataStr);   
                 } else {
-                    alert("TODO: get here");
+                    var codeFile = hashVal.substr(1) + ".json";
+                    $.get(storage + codeFile).
+                    done(function (resp) {
+                        console.log(resp);
+                    }).
+                    fail(function(xhr, status, error) {
+                        var text = xhr.responseText;
+                        if (typeof text == "undefined") {
+                            text = "backend problem - please refresh and try again"
+                        }
+                        playGround.alert(text, "error");
+                    });
                 }
 
                 playGround.codeSetup(dataObj);
