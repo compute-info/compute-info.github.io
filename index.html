@@ -157,14 +157,20 @@
                 
                 $.post(worker, dataStr).
                     done(function (resp) {
+                        document.location.hash = resp.id;
                         if (isRun) {
                             $("#output").text(resp.output);
                             $("#result").show();
                             $("#result")[0].scrollIntoView({
                                 behavior: "smooth"
                             });
+                        } else {
+                            navigator.clipboard.writeText(window.location.href).then(function () {
+                                playGround.alert("link has been copied to clipboard");
+                            }, function (err) {
+                                playGround.alert("failed to copy link to clipboard - use the current URL in address bar", "error");
+                            });
                         }
-                        document.location.hash = resp.id;
                     }).
                     fail(function(xhr, status, error) {
                         var text = xhr.responseText;
@@ -178,7 +184,7 @@
                                 break;
 
                             default:
-                                playGround.alert(text);
+                                playGround.alert(text, "error");
                         }
                     }).
                     always(function() {
@@ -200,10 +206,13 @@
                         alertClasses = "alert alert-warning alert-dismissible fade show";
                         msg = "<strong>WARNING:</strong> " + text;
                         break;
-
-                    default:
+                    case "error":
                         alertClasses = "alert alert-danger alert-dismissible fade show";
                         msg = "<strong>ERROR:</strong> " + text;
+
+                    default:
+                        alertClasses = "alert alert-info alert-dismissible fade show";
+                        msg = "<strong>INFO:</strong> " + text;
                 }
 
                 $("#alert").addClass(alertClasses);
