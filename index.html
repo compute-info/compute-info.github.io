@@ -123,6 +123,7 @@
     <script>
         var worker = "http://localhost:8080/";
         // var worker = "https://worker01.compute.info/";
+        var storage = "https://s3.amazonaws.com/compute.info/code/";
         var codeMirror;
         var playGround = {
             init: function() {
@@ -132,8 +133,13 @@
                 });
                 codeMirror.setSize("100%", "100%");
 
-                var dataStr = localStorage.getItem("data");
-                var dataObj = JSON.parse(dataStr);
+                var dataStr, dataObj;
+                if (window.location.hash == "" || window.location.hash == "#") {
+                    dataStr = localStorage.getItem("data");
+                    dataObj = JSON.parse(dataStr);   
+                } else {
+                    alert("TODO: get here");
+                }
 
                 playGround.codeSetup(dataObj);
             },
