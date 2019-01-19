@@ -121,8 +121,8 @@
 
     <!-- Custom JS -->
     <script>
-        // var worker = "http://localhost:8080/";
-        var worker = "https://worker01.compute.info/";
+        var worker = "http://localhost:8080/";
+        // var worker = "https://worker01.compute.info/";
         var codeMirror;
         var playGround = {
             init: function() {
@@ -138,14 +138,18 @@
                 playGround.codeSetup(dataObj);
             },
 
-            run: function() {
-                $("#run").html('Run <div class="fas fa-spinner fa-spin"></div>');
-                $("#run").prop('disabled', true);
+            cmd: function(isRun) {
+                if (isRun) {
+                    $("#run").html('Run <div class="fas fa-spinner fa-spin"></div>');
+                } else {
+                    $("#link").html('Link <div class="fas fa-spinner fa-spin"></div>');
+                }
+                playGround.cmdDisable(true);
 
                 var dataObj = new Object();
                 dataObj.lang = $("#lang").val();
                 dataObj.code = codeMirror.getValue();
-                dataObj.run = true;
+                dataObj.run = isRun;
                 var dataStr = JSON.stringify(dataObj);
 
                 localStorage['data'] = dataStr;
@@ -153,11 +157,14 @@
                 
                 $.post(worker, dataStr).
                     done(function (resp) {
-                        $("#output").text(resp.output);
-                        $("#result").show();
-                        $("#result")[0].scrollIntoView({
-                            behavior: "smooth"
-                        });
+                        if (isRun) {
+                            $("#output").text(resp.output);
+                            $("#result").show();
+                            $("#result")[0].scrollIntoView({
+                                behavior: "smooth"
+                            });
+                        }
+                        document.location.hash = resp.id;
                     }).
                     fail(function(xhr, status, error) {
                         var text = xhr.responseText;
@@ -175,46 +182,12 @@
                         }
                     }).
                     always(function() {
-                        $("#run").html('Run <i class="fas fa-play-circle"></i>');
-                        $("#run").prop('disabled', false);
-                    });
-            },
-
-            link: function() {
-                $("#link").html('Run <div class="fas fa-spinner fa-spin"></div>');
-                $("#link").prop('disabled', true);
-
-                var dataObj = new Object();
-                dataObj.lang = $("#lang").val();
-                dataObj.code = codeMirror.getValue();
-                var dataStr = JSON.stringify(dataObj);
-
-                $.post(worker, dataStr).
-                    done(function (resp) {
-                        $("#output").text(resp.id);
-                        $("#result").show();
-                        $("#result")[0].scrollIntoView({
-                            behavior: "smooth"
-                        });
-                    }).
-                    fail(function(xhr, status, error) {
-                        var text = xhr.responseText;
-                        if (typeof text == "undefined") {
-                            text = "backend problem - please refresh and try again"
+                        if (isRun) {
+                            $("#run").html('Run <i class="fas fa-play-circle"></i>');
+                        } else {
+                            $("#link").html('Link <i class="fas fa-link"></i>');
                         }
-
-                        switch(xhr.status) {
-                            case 429:
-                                playGround.alert(text, "warning");
-                                break;
-
-                            default:
-                                playGround.alert(text);
-                        }
-                    }).
-                    always(function() {
-                        $("#link").html('Link <i class="fas fa-link"></i>');
-                        $("#link").prop('disabled', false);
+                        playGround.cmdDisable(false);
                     });
             },
 
@@ -271,12 +244,18 @@
                     default:
                         codeMirror.setOption("mode", "clike");
                 }
+            },
+
+            cmdDisable: function(flag) {
+                $("#lang").prop('disabled', flag);
+                $("#run").prop('disabled', flag);
+                $("#link").prop('disabled', flag);
             }
         }
 
         $(document).ready(playGround.init);
-        $("#run").click(playGround.run);
-        $("#link").click(playGround.link);
+        $("#run").click(function(){playGround.cmd(true);});
+        $("#link").click(function(){playGround.cmd(false);});
         $("#lang").change(function(){playGround.codeSetup(null);});
     </script>
 
