@@ -73,8 +73,8 @@
                     <select class="custom-select" id="lang">
                         <option value="c">C</option>
                         <option selected value="cpp">C++</option>
-                        <!-- <option value="go">Go</option>
-                        <option value="cpp">Java</option> -->
+                        <option value="go">Go</option>
+                        <!-- <option value="cpp">Java</option> -->
                     </select>
                     <div class="input-group-append">
                         <button class="btn btn-dark" type="button" id="run">Run <i class="fas fa-play-circle"></i></button>
@@ -121,8 +121,8 @@
 
     <!-- Custom JS -->
     <script>
-        // var worker = "http://localhost:8080/";
-        var worker = "https://worker01.compute.info/";
+        var worker = "http://localhost:8080/";
+        // var worker = "https://worker01.compute.info/";
         var storage = "https://s3.amazonaws.com/compute.info/code/";
         var codeMirror;
         var playGround = {
@@ -238,33 +238,43 @@
                 var code, lang;
 
                 if (dataObj !== null) {
-                    code = dataObj.code;
                     lang = dataObj.lang;
+                    code = dataObj.code;
                 } else {
                     lang = $("#lang").val();
-                }
-
-                if (codeMirror.isClean()) {
                     var cHelloWorld = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}";
                     var cppHelloWorld = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
-
+                    var goHelloWorld = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello World!\")\n}";
                     switch (lang) {
                         case "c":
-                            codeMirror.setValue(typeof code !== "undefined" ? code : cHelloWorld);
+                            code = cHelloWorld;
+                            break;
+                        case "go":
+                            code = goHelloWorld;
                             break;
                         default:
-                            codeMirror.setValue(typeof code !== "undefined" ? code : cppHelloWorld);
+                            code = cppHelloWorld;
+                            
                     }
-                    codeMirror.markClean();
                 }
 
                 switch (lang) {
                     case "c":
-                    case "cpp":
+                        $("#lang").val("c");
                         codeMirror.setOption("mode", "clike");
                         break;
-                    default:
+                    case "go":
+                        $("#lang").val("go");
                         codeMirror.setOption("mode", "clike");
+                        break;
+                    default: // cpp
+                        $("#lang").val("cpp");
+                        codeMirror.setOption("mode", "clike");
+                }
+
+                if (codeMirror.isClean()) {
+                    codeMirror.setValue(code);
+                    codeMirror.markClean();
                 }
             },
 
