@@ -235,40 +235,38 @@
             },
 
             codeSetup: function(dataObj) {
-                var code, lang;
+                if (codeMirror.isClean()) {
+                    var code, lang;
 
-                if (dataObj !== null) {
-                    lang = dataObj.lang;
-                    code = dataObj.code;
-                } else {
-                    lang = $("#lang").val();
+                    if (dataObj !== null) {
+                        lang = dataObj.lang;
+                        code = dataObj.code;
+                        $("#lang").val(lang);
+                    } else {
+                        lang = $("#lang").val();
+                        switch (lang) {
+                            case "c":
+                                code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}";
+                                break;
+                            case "go":
+                                code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello World!\")\n}";
+                                break;
+                            default: // cpp
+                                code = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
+                        }
+                    }
+
                     switch (lang) {
                         case "c":
-                            code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}";
+                            codeMirror.setOption("mode", "clike");
                             break;
                         case "go":
-                            code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello World!\")\n}";
+                            codeMirror.setOption("mode", "clike");
                             break;
                         default: // cpp
-                            code = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
+                            codeMirror.setOption("mode", "clike");
                     }
-                }
 
-                switch (lang) {
-                    case "c":
-                        $("#lang").val("c");
-                        codeMirror.setOption("mode", "clike");
-                        break;
-                    case "go":
-                        $("#lang").val("go");
-                        codeMirror.setOption("mode", "clike");
-                        break;
-                    default: // cpp
-                        $("#lang").val("cpp");
-                        codeMirror.setOption("mode", "clike");
-                }
-
-                if (codeMirror.isClean()) {
                     codeMirror.setValue(code);
                     codeMirror.markClean();
                 }
