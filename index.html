@@ -133,27 +133,20 @@
                 });
                 codeMirror.setSize("100%", "100%");
 
-                var dataStr, dataObj;
                 var hashVal = window.location.hash;
                 if (hashVal === "" || hashVal === "#") {
-                    dataStr = localStorage.getItem("data");
-                    dataObj = JSON.parse(dataStr);   
+                    var dataObj = JSON.parse(localStorage.getItem("data")); 
+                    playGround.codeSetup(dataObj);  
                 } else {
                     var codeFile = hashVal.substr(1) + ".json";
                     $.get(storage + codeFile).
-                    done(function (resp) {
-                        console.log(resp);
-                    }).
-                    fail(function(xhr, status, error) {
-                        var text = xhr.responseText;
-                        if (typeof text == "undefined") {
-                            text = "backend problem - please refresh and try again"
-                        }
-                        playGround.alert(text, "error");
-                    });
+                        done(function (resp) {
+                            playGround.codeSetup(resp); 
+                        }).
+                        fail(function(xhr, status, error) {
+                            playGround.alert("code not found", "error");
+                        });
                 }
-
-                playGround.codeSetup(dataObj);
             },
 
             cmd: function(isRun) {
@@ -227,7 +220,7 @@
                     case "error":
                         alertClasses = "alert alert-danger alert-dismissible fade show";
                         msg = "<strong>ERROR:</strong> " + text;
-
+                        break;
                     default:
                         alertClasses = "alert alert-info alert-dismissible fade show";
                         msg = "<strong>INFO:</strong> " + text;
@@ -242,7 +235,7 @@
             codeSetup: function(dataObj) {
                 var code, lang;
 
-                if (dataObj !== null && Object.keys(dataObj).length !== 0) {
+                if (dataObj !== null) {
                     code = dataObj.code;
                     lang = dataObj.lang;
                 } else {
