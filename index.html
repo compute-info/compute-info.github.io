@@ -242,18 +242,15 @@
                     code = dataObj.code;
                 } else {
                     lang = $("#lang").val();
-                    var cHelloWorld = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}";
-                    var cppHelloWorld = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
-                    var goHelloWorld = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello World!\")\n}";
                     switch (lang) {
                         case "c":
-                            code = cHelloWorld;
+                            code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}";
                             break;
                         case "go":
-                            code = goHelloWorld;
+                            code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello World!\")\n}";
                             break;
-                        default:
-                            code = cppHelloWorld;
+                        default: // cpp
+                            code = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
                     }
                 }
 
