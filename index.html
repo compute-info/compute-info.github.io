@@ -150,19 +150,21 @@
             },
 
             cmd: function(isRun) {
-                if (isRun) {
-                    $("#run").html('Run <div class="fas fa-spinner fa-spin"></div>');
-                } else {
-                    $("#link").html('Link <div class="fas fa-spinner fa-spin"></div>');
-                }
-                playGround.cmdDisable(true);
-
                 var dataObj = new Object();
                 dataObj.lang = $("#lang").val();
                 dataObj.code = codeMirror.getValue();
                 dataObj.run = isRun;
-                var dataStr = JSON.stringify(dataObj);
 
+                if (isRun) {
+                    $("#run").html('Run <div class="fas fa-spinner fa-spin"></div>');
+                    ga('send', 'pageview', "/run?lang=" + dataObj.lang);
+                } else {
+                    $("#link").html('Link <div class="fas fa-spinner fa-spin"></div>');
+                    ga('send', 'pageview', "/alink?lang=" + dataObj.lang);
+                }
+                playGround.cmdDisable(true);
+
+                var dataStr = JSON.stringify(dataObj);
                 localStorage['data'] = dataStr;
                 codeMirror.markClean();
                 
