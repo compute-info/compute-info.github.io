@@ -91,6 +91,9 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
             <ul class="navbar-nav">
                 <li class="nav-item">
+                    <a class="nav-link" id="clear" href="#"><i class="fas fa-redo fa-fw"></i>&nbsp; Clear</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="https://github.com/compute-info/compute-info.github.io"><i class="fab fa-github fa-fw"
                             aria-hidden="true"></i>&nbsp; About</a>
                 </li>
@@ -275,6 +278,12 @@
                 }
             },
 
+            clear: function() {
+                codeMirror.setValue("");
+                codeMirror.focus();
+                localStorage.removeItem("data");
+            },
+
             cmdDisable: function(flag) {
                 $("#lang").prop('disabled', flag);
                 $("#run").prop('disabled', flag);
@@ -283,6 +292,7 @@
         }
 
         $(document).ready(playGround.init);
+        $("#clear").click(playGround.clear);
         $("#run").click(function(){playGround.cmd(true);});
         $("#link").click(function(){playGround.cmd(false);});
         $("#lang").change(function(){playGround.codeSetup(null);});
