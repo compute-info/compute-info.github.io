@@ -74,7 +74,7 @@
                         <option value="c">C</option>
                         <option selected value="cpp">C++</option>
                         <option value="go">Go</option>
-                        <!-- <option value="cpp">Java</option> -->
+                        <option value="java">Java</option>
                     </select>
                     <div class="input-group-append">
                         <button class="btn btn-dark" type="button" id="run">Run <i class="fas fa-play-circle"></i></button>
@@ -250,6 +250,9 @@
                                 break;
                             case "go":
                                 code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello World!\")\n}";
+                                break;
+                            case "java":
+                                code = "public class Program {\n  public static void main(String []args) {\n    System.out.println(\"Hello World!\");\n  }\n} ";
                                 break;
                             default: // cpp
                                 code = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
