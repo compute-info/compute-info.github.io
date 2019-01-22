@@ -249,16 +249,16 @@
                         lang = $("#lang").val();
                         switch (lang) {
                             case "c":
-                                code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}";
+                                code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}\n";
                                 break;
                             case "go":
-                                code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello World!\")\n}";
+                                code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello world!\")\n}\n";
                                 break;
                             case "java":
-                                code = "public class Program {\n  public static void main(String []args) {\n    System.out.println(\"Hello World!\");\n  }\n} ";
+                                code = "public class Program {\n  public static void main(String []args) {\n    System.out.println(\"Hello world!\");\n  }\n}\n";
                                 break;
                             default: // cpp
-                                code = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello World!\";\n}";
+                                code = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello world!\";\n}\n";
                         }
                     }
 
