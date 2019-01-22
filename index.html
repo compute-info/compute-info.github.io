@@ -147,7 +147,7 @@
                             playGround.codeSetup(resp); 
                         }).
                         fail(function(xhr, status, error) {
-                            playGround.alert("code not found", "error");
+                            playGround.alert("Code was not found.", "error");
                         });
                 }
             },
@@ -182,16 +182,16 @@
                             });
                         } else {
                             navigator.clipboard.writeText(window.location.href).then(function () {
-                                playGround.alert("link has been copied to clipboard");
+                                playGround.alert("Link has been copied to clipboard.");
                             }, function (err) {
-                                playGround.alert("failed to copy link to clipboard - use the current URL in address bar", "error");
+                                playGround.alert("Failed to copy link to clipboard. Please use the current URL in address bar.", "error");
                             });
                         }
                     }).
                     fail(function(xhr, status, error) {
                         var text = xhr.responseText;
                         if (typeof text == "undefined") {
-                            text = "backend problem - please refresh and try again"
+                            text = "The server has indicated a problem. Please refresh and try again."
                         }
 
                         switch(xhr.status) {
@@ -220,15 +220,15 @@
                 switch (type) {
                     case "warning":
                         alertClasses = "alert alert-warning alert-dismissible fade show";
-                        msg = "<strong>WARNING:</strong> " + text;
+                        msg = "<i class='fas fa-exclamation-triangle fa-fw'></i>&nbsp; " + text;
                         break;
                     case "error":
                         alertClasses = "alert alert-danger alert-dismissible fade show";
-                        msg = "<strong>ERROR:</strong> " + text;
+                        msg = "<i class='fas fa-exclamation-circle fa-fw'></i>&nbsp; " + text;
                         break;
                     default:
                         alertClasses = "alert alert-info alert-dismissible fade show";
-                        msg = "<strong>INFO:</strong> " + text;
+                        msg = "<i class='fas fa-info-circle fa-fw'></i>&nbsp; " + text;
                 }
 
                 $("#alert").addClass(alertClasses);
