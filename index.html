@@ -290,6 +290,7 @@
                 $("#output").text("");
                 $("#result").hide();
                 localStorage.removeItem("data");
+                codeMirror.markClean();
             },
 
             cmdDisable: function(flag) {
