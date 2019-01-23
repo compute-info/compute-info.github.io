@@ -138,9 +138,9 @@
                 playGround.load();
             },
 
-            load: function(e) {
+            load: function() {
                 var id = window.location.hash.substr(1);
-                
+
                 if (id === "" || id === "#") {
                     playGround.codeSetup(null, null);
                 } else {
@@ -300,7 +300,7 @@
         }
 
         $(document).ready(playGround.init);
-        $(window).on('hashchange', function(e){ playGround.load(e); });
+        $(window).on('hashchange', function(){playGround.load();});
         $("#clear").click(playGround.clear);
         $("#lang").change(function(){playGround.codeSetup(this.value, null);});
         $("#run").click(function(){playGround.cmd(true);});
