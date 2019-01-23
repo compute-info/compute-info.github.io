@@ -300,7 +300,7 @@
         }
 
         $(document).ready(playGround.init);
-        $(window).on('hashchange', function(){playGround.load();});
+        $(window).on('hashchange', playGround.load);
         $("#clear").click(playGround.clear);
         $("#lang").change(function(){playGround.codeSetup(this.value, null);});
         $("#run").click(function(){playGround.cmd(true);});
