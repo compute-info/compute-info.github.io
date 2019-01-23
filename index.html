@@ -137,12 +137,12 @@
 
                 var hashVal = window.location.hash;
                 if (hashVal === "" || hashVal === "#") {
-                    playGround.codeSetup();  
+                    playGround.codeSetup(null, null);
                 } else {
                     var codeFile = hashVal.substr(1) + ".json";
                     $.get(storage + codeFile).
                         done(function (resp) {
-                            playGround.codeSetup(resp); 
+                            playGround.codeSetup(resp.lang, resp.code); 
                         }).
                         fail(function(xhr, status, error) {
                             playGround.alert("Code was not found.", "error");
@@ -235,17 +235,31 @@
                 $(window).scrollTop(0);
             },
 
-            codeSetup: function(dataObj) {
-                if (codeMirror.isClean()) {
-                    var code, lang;
-                    var dataObj = JSON.parse(localStorage.getItem("data")); 
-
-                    if (dataObj !== null) {
-                        lang = dataObj.lang;
-                        code = dataObj.code;
-                        $("#lang").val(lang);
+            codeSetup: function(lang, code) {
+                localData = JSON.parse(localStorage.getItem("data"));
+                if (lang === null) {
+                    if (localData !== null) {
+                        lang = localData.lang;
                     } else {
                         lang = $("#lang").val();
+                    }
+                }
+                if (code === null && localData !== null) {
+                    code = localData.code;
+                }
+
+                $("#lang").val(lang);
+
+                switch (lang) {
+                    case "go":
+                        codeMirror.setOption("mode", "go");
+                        break;
+                    default: // c, cpp, java
+                        codeMirror.setOption("mode", "clike");
+                }
+
+                if (codeMirror.isClean()) {
+                    if (code === null) {
                         switch (lang) {
                             case "c":
                                 code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}\n";
@@ -259,14 +273,6 @@
                             default: // cpp
                                 code = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello world!\";\n}\n";
                         }
-                    }
-
-                    switch (lang) {
-                        case "go":
-                            codeMirror.setOption("mode", "go");
-                            break;
-                        default: // c, cpp, java
-                            codeMirror.setOption("mode", "clike");
                     }
 
                     codeMirror.setValue(code);
@@ -290,7 +296,7 @@
 
         $(document).ready(playGround.init);
         $("#clear").click(playGround.clear);
-        $("#lang").change(playGround.codeSetup);
+        $("#lang").change(function(){playGround.codeSetup(this.value, null);});
         $("#run").click(function(){playGround.cmd(true);});
         $("#link").click(function(){playGround.cmd(false);});
     </script>
