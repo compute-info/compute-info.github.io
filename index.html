@@ -135,11 +135,16 @@
                 });
                 codeMirror.setSize("100%", "100%");
 
-                var hashVal = window.location.hash;
-                if (hashVal === "" || hashVal === "#") {
+                playGround.load();
+            },
+
+            load: function(e) {
+                var id = window.location.hash.substr(1);
+                
+                if (id === "" || id === "#") {
                     playGround.codeSetup(null, null);
                 } else {
-                    var codeFile = hashVal.substr(1) + ".json";
+                    var codeFile = id + ".json";
                     $.get(storage + codeFile).
                         done(function (resp) {
                             playGround.codeSetup(resp.lang, resp.code); 
@@ -295,6 +300,7 @@
         }
 
         $(document).ready(playGround.init);
+        $(window).on('hashchange', function(e){ playGround.load(e); });
         $("#clear").click(playGround.clear);
         $("#lang").change(function(){playGround.codeSetup(this.value, null);});
         $("#run").click(function(){playGround.cmd(true);});
