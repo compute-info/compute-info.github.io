@@ -121,7 +121,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/theme/base16-dark.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/clike/clike.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/go/go.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/javascript/javascript.js"></script>
 
     <!-- Custom JS -->
     <script>
@@ -263,13 +262,10 @@
                     }
 
                     switch (lang) {
-                        case "c":
-                            codeMirror.setOption("mode", "clike");
-                            break;
                         case "go":
-                            codeMirror.setOption("mode", "clike");
+                            codeMirror.setOption("mode", "go");
                             break;
-                        default: // cpp
+                        default: // c, cpp, java
                             codeMirror.setOption("mode", "clike");
                     }
 
