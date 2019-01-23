@@ -137,8 +137,7 @@
 
                 var hashVal = window.location.hash;
                 if (hashVal === "" || hashVal === "#") {
-                    var dataObj = JSON.parse(localStorage.getItem("data")); 
-                    playGround.codeSetup(dataObj);  
+                    playGround.codeSetup();  
                 } else {
                     var codeFile = hashVal.substr(1) + ".json";
                     $.get(storage + codeFile).
@@ -239,6 +238,7 @@
             codeSetup: function(dataObj) {
                 if (codeMirror.isClean()) {
                     var code, lang;
+                    var dataObj = JSON.parse(localStorage.getItem("data")); 
 
                     if (dataObj !== null) {
                         lang = dataObj.lang;
@@ -290,9 +290,9 @@
 
         $(document).ready(playGround.init);
         $("#clear").click(playGround.clear);
+        $("#lang").change(playGround.codeSetup);
         $("#run").click(function(){playGround.cmd(true);});
         $("#link").click(function(){playGround.cmd(false);});
-        $("#lang").change(function(){playGround.codeSetup(null);});
     </script>
 
     <!-- Google Analytics -->
