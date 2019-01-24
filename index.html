@@ -92,7 +92,7 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" id="clear" href="#" role="button"><i class="fas fa-redo fa-fw"></i>&nbsp; Clear</a>
+                    <a class="nav-link" id="clear" href="javascript:void(0)" role="button"><i class="fas fa-redo fa-fw"></i>&nbsp; Clear</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://github.com/compute-info/compute-info.github.io"><i class="fab fa-github fa-fw"
@@ -139,17 +139,18 @@
             },
 
             load: function() {
-                var id = window.location.hash.substr(1);
-
-                if (id === "" || id === "#") {
+                var hash = window.location.hash;
+                if (hash === "") {
+                    // visiting root
                     playGround.codeSetup(null, null);
                 } else {
-                    var codeFile = id + ".json";
+                    // loading code
+                    var codeFile = hash.substr(1) + ".json";
                     $.get(storage + codeFile).
                         done(function (resp) {
-                            playGround.codeSetup(resp.lang, resp.code); 
+                            playGround.codeSetup(resp.lang, resp.code);
                         }).
-                        fail(function(xhr, status, error) {
+                        fail(function (xhr, status, error) {
                             playGround.alert("Code was not found.", "error");
                         });
                 }
@@ -291,6 +292,7 @@
                 $("#result").hide();
                 localStorage.removeItem("data");
                 codeMirror.markClean();
+                history.pushState("", document.title, window.location.pathname + window.location.search);
             },
 
             cmdDisable: function(flag) {
