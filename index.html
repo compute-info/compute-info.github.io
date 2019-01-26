@@ -130,6 +130,7 @@
         var worker = "https://worker01.compute.info/";
         var storage = "https://s3.amazonaws.com/compute.info/code/";
         var codeMirror;
+        var lock = false;
         var playGround = {
             init: function() {
                 codeMirror = CodeMirror($("#editor").get(0), {
@@ -143,7 +144,8 @@
                 playGround.load();
                 // indicate in the title changes aren't saved to local storage
                 codeMirror.on("change", function (cm, cmChangeObject) {
-                    if (!document.title.startsWith("*")) {
+                    if (!lock && !document.title.startsWith("*")) {
+                        history.pushState("", document.title, window.location.pathname + window.location.search);
                         document.title = "*" + document.title;
                     }
                 });
@@ -250,6 +252,7 @@
             },
 
             codeSetup: function(lang, code) {
+                lock = true;
                 localData = JSON.parse(localStorage.getItem("data"));
                 if (lang === null) {
                     if (localData !== null) {
@@ -293,18 +296,22 @@
                 }
 
                 playGround.save();
+                lock = false;
             },
 
             save: function() {
+                if (codeMirror.isClean()) {
+                    return;
+                }
                 var dataObj = new Object();
                 dataObj.lang = $("#lang").val();
                 dataObj.code = codeMirror.getValue();
                 var dataStr = JSON.stringify(dataObj);
                 localStorage['data'] = dataStr;
-                codeMirror.markClean();
                 if (document.title.startsWith("*")) {
                     document.title = document.title.substr(1);
                 }
+                codeMirror.markClean();
             },
 
             clear: function() {
@@ -312,7 +319,6 @@
                 $("#output").text("");
                 $("#result").hide();
                 localStorage.removeItem("data");
-                codeMirror.markClean();
                 history.pushState("", document.title, window.location.pathname + window.location.search);
             },
 
