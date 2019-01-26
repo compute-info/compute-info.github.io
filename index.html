@@ -92,6 +92,9 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
             <ul class="navbar-nav">
                 <li class="nav-item">
+                    <a class="nav-link" id="save" href="javascript:void(0)" role="button"><i class="fas fa-save fa-fw"></i>&nbsp; Save</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" id="clear" href="javascript:void(0)" role="button"><i class="fas fa-redo fa-fw"></i>&nbsp; Clear</a>
                 </li>
                 <li class="nav-item">
@@ -134,8 +137,13 @@
                     lineNumbers: true
                 });
                 codeMirror.setSize("100%", "100%");
-
                 playGround.load();
+                // indicate in the title changes aren't saved to local storage
+                codeMirror.on("change", function (cm, cmChangeObject) {
+                    if (!document.title.startsWith("*")) {
+                        document.title = "*" + document.title;
+                    }
+                });
             },
 
             load: function() {
@@ -161,6 +169,7 @@
                 dataObj.lang = $("#lang").val();
                 dataObj.code = codeMirror.getValue();
                 dataObj.run = isRun;
+                var dataStr = JSON.stringify(dataObj);
 
                 if (isRun) {
                     $("#run").html('Run <div class="fas fa-spinner fa-spin"></div>');
@@ -170,10 +179,6 @@
                     ga('send', 'pageview', "/link?lang=" + dataObj.lang);
                 }
                 playGround.cmdDisable(true);
-
-                var dataStr = JSON.stringify(dataObj);
-                localStorage['data'] = dataStr;
-                codeMirror.markClean();
                 
                 $.post(worker, dataStr).
                     done(function (resp) {
@@ -282,7 +287,20 @@
                     }
 
                     codeMirror.setValue(code);
-                    codeMirror.markClean();
+                }
+
+                playGround.save();
+            },
+
+            save: function() {
+                dataObj = new Object();
+                dataObj.lang = $("#lang").val();
+                dataObj.code = codeMirror.getValue();
+                dataStr = JSON.stringify(dataObj);
+                localStorage['data'] = dataStr;
+                codeMirror.markClean();
+                if (document.title.startsWith("*")) {
+                    document.title = document.title.substr(1);
                 }
             },
 
@@ -305,6 +323,7 @@
         $(document).ready(playGround.init);
         $(window).on('hashchange', playGround.load);
         $("#clear").click(playGround.clear);
+        $("#save").click(playGround.save);
         $("#lang").change(function(){playGround.codeSetup(this.value, null);});
         $("#run").click(function(){playGround.cmd(true);});
         $("#link").click(function(){playGround.cmd(false);});
