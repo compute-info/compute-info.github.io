@@ -92,7 +92,7 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" id="save" href="javascript:void(0)" role="button"><i class="fas fa-save fa-fw"></i>&nbsp; Save</a>
+                    <a class="nav-link" id="save" href="javascript:void(0)" role="button"><i class="fas fa-save fa-fw"></i>&nbsp; <u>S</u>ave</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="clear" href="javascript:void(0)" role="button"><i class="fas fa-redo fa-fw"></i>&nbsp; Clear</a>
@@ -134,7 +134,10 @@
             init: function() {
                 codeMirror = CodeMirror($("#editor").get(0), {
                     theme: "base16-dark",
-                    lineNumbers: true
+                    lineNumbers: true,
+                    extraKeys: {
+                        "Ctrl-S": playGround.save,
+                    },
                 });
                 codeMirror.setSize("100%", "100%");
                 playGround.load();
@@ -293,10 +296,10 @@
             },
 
             save: function() {
-                dataObj = new Object();
+                var dataObj = new Object();
                 dataObj.lang = $("#lang").val();
                 dataObj.code = codeMirror.getValue();
-                dataStr = JSON.stringify(dataObj);
+                var dataStr = JSON.stringify(dataObj);
                 localStorage['data'] = dataStr;
                 codeMirror.markClean();
                 if (document.title.startsWith("*")) {
