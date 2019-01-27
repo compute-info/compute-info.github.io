@@ -74,6 +74,7 @@
                     <select class="custom-select" id="lang">
                         <option value="c">C</option>
                         <option selected value="cpp">C++</option>
+                        <option value="cs">C#</option>
                         <option value="go">Go</option>
                         <option value="java">Java</option>
                     </select>
@@ -288,6 +289,9 @@
                     switch (lang) {
                         case "c":
                             code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}\n";
+                            break;
+                        case "cs":
+                            code = "using System;\n\npublic class Program\n{\n  static public void Main()\n  {\n    Console.WriteLine (\"Hello world!\");\n  }\n}\n";
                             break;
                         case "go":
                             code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello world!\")\n}\n";
