@@ -255,10 +255,6 @@
             },
 
             codeSetup: function(lang, code) {
-                if (!codeMirror.isClean()) {
-                    return;
-                }
-
                 changeLock = true;
 
                 localData = JSON.parse(localStorage.getItem("data"));
@@ -275,7 +271,18 @@
 
                 $("#lang").val(lang);
 
-                playGround.setMode(lang);
+                switch (lang) {
+                    case "go":
+                        codeMirror.setOption("mode", "go");
+                        break;
+                    default: // c, cpp, java
+                        codeMirror.setOption("mode", "clike");
+                }
+
+                if (!codeMirror.isClean()) {
+                    changeLock = false;
+                    return;
+                }
 
                 if (code === null) {
                     switch (lang) {
@@ -314,16 +321,6 @@
                 codeMirror.markClean();
             },
 
-            setMode: function(lang) {
-                switch (lang) {
-                    case "go":
-                        codeMirror.setOption("mode", "go");
-                        break;
-                    default: // c, cpp, java
-                        codeMirror.setOption("mode", "clike");
-                }
-            },
-
             clear: function() {
                 codeMirror.setValue("");
                 $("#output").text("");
@@ -343,7 +340,7 @@
         $(window).on('hashchange', playGround.load);
         $("#clear").click(playGround.clear);
         $("#save").click(playGround.save);
-        $("#lang").change(function(){playGround.setMode(this.value);});
+        $("#lang").change(function(){playGround.codeSetup(this.value, null);});
         $("#run").click(function(){playGround.cmd(true);});
         $("#link").click(function(){playGround.cmd(false);});
     </script>
