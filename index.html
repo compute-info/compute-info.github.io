@@ -188,6 +188,7 @@
                 $.post(worker, dataStr).
                     done(function (resp) {
                         document.location.hash = resp.id;
+                        playGround.save();
                         if (isRun) {
                             $("#output").text(resp.output);
                             $("#result").show();
@@ -253,6 +254,11 @@
 
             codeSetup: function(lang, code) {
                 lock = true;
+
+                if (!codeMirror.isClean()) {
+                    return;
+                }
+
                 localData = JSON.parse(localStorage.getItem("data"));
                 if (lang === null) {
                     if (localData !== null) {
@@ -267,33 +273,25 @@
 
                 $("#lang").val(lang);
 
-                switch (lang) {
-                    case "go":
-                        codeMirror.setOption("mode", "go");
-                        break;
-                    default: // c, cpp, java
-                        codeMirror.setOption("mode", "clike");
-                }
+                playGround.setMode(lang);
 
-                if (codeMirror.isClean()) {
-                    if (code === null) {
-                        switch (lang) {
-                            case "c":
-                                code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}\n";
-                                break;
-                            case "go":
-                                code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello world!\")\n}\n";
-                                break;
-                            case "java":
-                                code = "public class Program {\n  public static void main(String []args) {\n    System.out.println(\"Hello world!\");\n  }\n}\n";
-                                break;
-                            default: // cpp
-                                code = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello world!\";\n}\n";
-                        }
+                if (code === null) {
+                    switch (lang) {
+                        case "c":
+                            code = "#include <stdio.h>\n\nint main(void)\n{\n  printf(\"Hello world!\\n\");\n  return 0;\n}\n";
+                            break;
+                        case "go":
+                            code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello world!\")\n}\n";
+                            break;
+                        case "java":
+                            code = "public class Program {\n  public static void main(String []args) {\n    System.out.println(\"Hello world!\");\n  }\n}\n";
+                            break;
+                        default: // cpp
+                            code = "#include <iostream>\n\nint main()\n{\n  std::cout << \"Hello world!\";\n}\n";
                     }
-
-                    codeMirror.setValue(code);
                 }
+
+                codeMirror.setValue(code);
 
                 codeMirror.markClean();
                 lock = false;
@@ -312,6 +310,16 @@
                     document.title = document.title.substr(1);
                 }
                 codeMirror.markClean();
+            },
+
+            setMode: function(lang) {
+                switch (lang) {
+                    case "go":
+                        codeMirror.setOption("mode", "go");
+                        break;
+                    default: // c, cpp, java
+                        codeMirror.setOption("mode", "clike");
+                }
             },
 
             clear: function() {
@@ -333,7 +341,7 @@
         $(window).on('hashchange', playGround.load);
         $("#clear").click(playGround.clear);
         $("#save").click(playGround.save);
-        $("#lang").change(function(){playGround.codeSetup(this.value, null);});
+        $("#lang").change(function(){playGround.setMode(this.value);});
         $("#run").click(function(){playGround.cmd(true);});
         $("#link").click(function(){playGround.cmd(false);});
     </script>
