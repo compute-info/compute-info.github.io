@@ -145,8 +145,10 @@
                 // indicate in the title changes aren't saved to local storage
                 codeMirror.on("change", function (cm, cmChangeObject) {
                     if (!changeLock && !document.title.startsWith("*")) {
-                        history.pushState("", document.title, window.location.pathname + window.location.search);
                         document.title = "*" + document.title;
+                        if (window.location.hash !== "") {
+                            history.pushState("", document.title, window.location.pathname + window.location.search);
+                        }
                     }
                 });
             },
@@ -256,7 +258,7 @@
                 if (!codeMirror.isClean()) {
                     return;
                 }
-                
+
                 changeLock = true;
 
                 localData = JSON.parse(localStorage.getItem("data"));
