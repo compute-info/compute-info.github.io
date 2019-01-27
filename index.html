@@ -253,11 +253,11 @@
             },
 
             codeSetup: function(lang, code) {
-                changeLock = true;
-
                 if (!codeMirror.isClean()) {
                     return;
                 }
+                
+                changeLock = true;
 
                 localData = JSON.parse(localStorage.getItem("data"));
                 if (lang === null) {
