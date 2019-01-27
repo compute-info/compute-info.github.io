@@ -130,7 +130,7 @@
         var worker = "https://worker01.compute.info/";
         var storage = "https://s3.amazonaws.com/compute.info/code/";
         var codeMirror;
-        var lock = false;
+        var changeLock = false;
         var playGround = {
             init: function() {
                 codeMirror = CodeMirror($("#editor").get(0), {
@@ -144,7 +144,7 @@
                 playGround.load();
                 // indicate in the title changes aren't saved to local storage
                 codeMirror.on("change", function (cm, cmChangeObject) {
-                    if (!lock && !document.title.startsWith("*")) {
+                    if (!changeLock && !document.title.startsWith("*")) {
                         history.pushState("", document.title, window.location.pathname + window.location.search);
                         document.title = "*" + document.title;
                     }
@@ -253,7 +253,7 @@
             },
 
             codeSetup: function(lang, code) {
-                lock = true;
+                changeLock = true;
 
                 if (!codeMirror.isClean()) {
                     return;
@@ -294,7 +294,7 @@
                 codeMirror.setValue(code);
                 codeMirror.markClean();
 
-                lock = false;
+                changeLock = false;
             },
 
             save: function() {
