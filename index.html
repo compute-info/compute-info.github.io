@@ -99,8 +99,7 @@
                     <a class="nav-link" id="clear" href="javascript:void(0)" role="button"><i class="fas fa-redo fa-fw"></i>&nbsp; Clear</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://github.com/compute-info/compute-info.github.io"><i class="fab fa-github fa-fw"
-                            aria-hidden="true"></i>&nbsp; About</a>
+                    <a class="nav-link" id="about" href="javascript:void(0)" role="button"><i class="fab fa-github fa-fw"></i>&nbsp; About</a>
                 </li>
             </ul>
         </div>
@@ -181,10 +180,10 @@
 
                 if (isRun) {
                     $("#run").html('Run <div class="fas fa-spinner fa-spin"></div>');
-                    ga('send', 'pageview', "/run?lang=" + dataObj.lang);
+                    ga('send', 'pageview', "/run/" + dataObj.lang);
                 } else {
                     $("#link").html('Link <div class="fas fa-spinner fa-spin"></div>');
-                    ga('send', 'pageview', "/link?lang=" + dataObj.lang);
+                    ga('send', 'pageview', "/link/" + dataObj.lang);
                 }
                 playGround.cmdDisable(true);
                 
@@ -314,14 +313,20 @@
                 if (codeMirror.isClean()) {
                     return;
                 }
+
                 var dataObj = new Object();
                 dataObj.lang = $("#lang").val();
                 dataObj.code = codeMirror.getValue();
                 var dataStr = JSON.stringify(dataObj);
+
+                ga('send', 'pageview', "/save/" + dataObj.lang);
+
                 localStorage['data'] = dataStr;
+
                 if (document.title.startsWith("*")) {
                     document.title = document.title.substr(1);
                 }
+
                 codeMirror.markClean();
             },
 
@@ -330,7 +335,15 @@
                 $("#output").text("");
                 $("#result").hide();
                 localStorage.removeItem("data");
+
+                ga('send', 'pageview', "/clear");
+
                 history.pushState("", document.title, window.location.pathname + window.location.search);
+            },
+
+            about: function() {
+                ga('send', 'pageview', "/about");
+                window.location.href = "https://github.com/compute-info/compute-info.github.io";
             },
 
             cmdDisable: function(flag) {
@@ -344,6 +357,7 @@
         $(window).on('hashchange', playGround.load);
         $("#clear").click(playGround.clear);
         $("#save").click(playGround.save);
+        $("#about").click(playGround.about);
         $("#lang").change(function(){playGround.codeSetup(this.value, null);});
         $("#run").click(function(){playGround.cmd(true);});
         $("#link").click(function(){playGround.cmd(false);});
