@@ -277,7 +277,7 @@
 
                 switch (lang) {
                     case "cob":
-                        codeMirror.setOption("mode", "cob");
+                        codeMirror.setOption("mode", "cobol");
                         break;
                     case "go":
                         codeMirror.setOption("mode", "go");
@@ -303,7 +303,7 @@
                             code = "using System;\n\npublic class Program\n{\n  static public void Main()\n  {\n    Console.WriteLine (\"Hello world!\");\n  }\n}\n";
                             break;
                         case "cob":
-                            code = "      * Sample COBOL program\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. hello.\n       PROCEDURE DIVISION.\n       DISPLAY \"Hello World!\".\n       STOP RUN.";
+                            code = "      * Sample COBOL program\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. hello.\n       PROCEDURE DIVISION.\n       DISPLAY \"Hello world!\".\n       STOP RUN.";
                             break;
                         case "go":
                             code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello world!\")\n}\n";
