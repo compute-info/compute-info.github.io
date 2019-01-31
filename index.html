@@ -54,7 +54,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
     <title>compute.info - online coding playground</title>
-    <meta name="description" content="An online coding playground (compiler and interpreter) with code sharing capabilities. Paste your code to run or to get a short link for sharing. Supported Languages: C, C++, C#, Go, and Java.">
+    <meta name="description" content="An online coding playground (compiler and interpreter) with code sharing capabilities. Paste your code to run or to get a short link for sharing. Supported Languages: C, C++, C#, COBOL, Go, Java, and Python.">
 </head>
 
 <body>
@@ -75,6 +75,7 @@
                         <option value="c">C</option>
                         <option selected value="cpp">C++</option>
                         <option value="cs">C#</option>
+                        <option value="cob">COBOL</option>
                         <option value="go">Go</option>
                         <option value="java">Java</option>
                         <option value="py">Python</option>
@@ -126,6 +127,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/clike/clike.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/go/go.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/python/python.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/cobol/cobol.js"></script>
 
     <!-- Custom JS -->
     <script>
@@ -274,6 +276,9 @@
                 $("#lang").val(lang);
 
                 switch (lang) {
+                    case "cob":
+                        codeMirror.setOption("mode", "cob");
+                        break;
                     case "go":
                         codeMirror.setOption("mode", "go");
                         break;
@@ -296,6 +301,9 @@
                             break;
                         case "cs":
                             code = "using System;\n\npublic class Program\n{\n  static public void Main()\n  {\n    Console.WriteLine (\"Hello world!\");\n  }\n}\n";
+                            break;
+                        case "cob":
+                            code = "      * Sample COBOL program\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. hello.\n       PROCEDURE DIVISION.\n       DISPLAY \"Hello World!\".\n       STOP RUN.";
                             break;
                         case "go":
                             code = "package main\n\nimport \"fmt\"\n\nfunc main() {\n  fmt.Println(\"Hello world!\")\n}\n";
