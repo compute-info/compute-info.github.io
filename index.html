@@ -142,6 +142,9 @@
                     lineNumbers: true,
                     extraKeys: {
                         "Ctrl-S": playGround.save,
+                        "Cmd-S": playGround.save,
+                        "Ctrl-Enter": playGround.cmd(true),
+                        "Cmd-Enter": playGround.cmd(true),
                     },
                 });
                 codeMirror.setSize("100%", "100%");
