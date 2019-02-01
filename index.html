@@ -143,8 +143,8 @@
                     extraKeys: {
                         "Ctrl-S": playGround.save,
                         "Cmd-S": playGround.save,
-                        "Ctrl-Enter": playGround.cmd(true),
-                        "Cmd-Enter": playGround.cmd(true),
+                        "Ctrl-Enter": function(){playGround.cmd(true);},
+                        "Cmd-Enter": function(){playGround.cmd(true);},
                     },
                 });
                 codeMirror.setSize("100%", "100%");
